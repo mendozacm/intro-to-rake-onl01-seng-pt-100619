@@ -16,6 +16,14 @@ class Student
   end
   
   def self.create_table
+    
+    namespace :db do
+  desc 'migrate changes to your database'
+  task :migrate => :environment do
+    Student.create_table
+  end
+end
+
     sql =  <<-SQL 
       CREATE TABLE IF NOT EXISTS students (
         id INTEGER PRIMARY KEY, 
@@ -25,12 +33,7 @@ class Student
     SQL
     DB[:conn].execute(sql) 
     
-    namespace :db do
-  desc 'migrate changes to your database'
-  task :migrate => :environment do
-    Student.create_table
-  end
-end
+    
   end
 
   def self.drop_table
